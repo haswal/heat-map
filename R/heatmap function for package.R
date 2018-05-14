@@ -211,7 +211,7 @@ heatmap_clust <- function(data, dendro="none", limits=c(min(heatmap_data$expr), 
     	
     	} else if(dendro=="x"){
     	
-    		x <- as.matrix(d)
+    		x <- as.matrix(data)
 			dd.col <- as.dendrogram(hclust(dist(t(x), method=dist_method), method=hclust_method))
 			dy <- dendro_data(dd.col)
     

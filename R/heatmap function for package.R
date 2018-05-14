@@ -5,7 +5,7 @@ library(ggsci)
 library(dplyr)
 library(scales)
 
-heatmap_clust <- function(data, dendro="none", limits=c(min(heatmap_data$expr), max(heatmap_data$expr)), dendro_thick=0.25, dendro_prop_x=0.2, dendro_prop_y=0.2,x_axis_text_angle=45, x_axis_font_size=6,  y_axis_font_size=5, colorbar_height=10, title=NULL, title_size=16, min_color="blue2", max_color="red2", mid_color="white", x_y_ratio=1, show_legend=TRUE, dist_method="euclidean", hclust_method="complete") {
+heatmap_clust <- function(data, dendro="none", limits=c(min(heatmap_data$expr), max(heatmap_data$expr)), dendro_thick=0.25, dendro_prop_x=0.2, dendro_prop_y=0.2,x_axis_text_angle=45, x_axis_font_size=6,  y_axis_font_size=5, colorbar_height=10, title=NULL, title_size=16, min_color="blue2", max_color="red2", mid_color="white", midpoint=0, x_y_ratio=1, show_legend=TRUE, dist_method="euclidean", hclust_method="complete") {
 	x_y_ratio <- ifelse(x_y_ratio=="square_tile", dim(data)[1]/dim(data)[2], x_y_ratio)
 	if (dendro=="none"){
 		data$gene <- rownames(data)
@@ -16,7 +16,7 @@ heatmap_clust <- function(data, dendro="none", limits=c(min(heatmap_data$expr), 
     	p <- (ggplot(heatmap_data, 
     			aes(x=variable, y=gene, fill=expr))
     		+geom_tile(col="black", show.legend=show_legend)
-    		+scale_fill_gradient2(limits=limits,oob=squish,low=min_color, high=max_color, mid=mid_color)	
+    		+scale_fill_gradient2(limits=limits,oob=squish,low=min_color, high=max_color, mid=mid_color, midpoint=midpoint)	
     		+scale_x_discrete(
     			position="bottom",
     			expand = c(0, -0.075))
@@ -77,7 +77,7 @@ heatmap_clust <- function(data, dendro="none", limits=c(min(heatmap_data$expr), 
  		p <- (ggplot(heatmap_data, 
 				aes(x=x_center, y=y_center, fill=expr, height=height, width=width))
 			+geom_tile(col="black", show.legend=show_legend)
-			+scale_fill_gradient2(limits=limits,oob=squish,low=min_color, high=max_color, mid=mid_color)
+			+scale_fill_gradient2(limits=limits,oob=squish,low=min_color, high=max_color, mid=mid_color, midpoint=midpoint)
 			+scale_x_continuous(
 				breaks = sample_pos_table$x_center, 
              	labels = sample_pos_table$sample, 
@@ -167,7 +167,7 @@ heatmap_clust <- function(data, dendro="none", limits=c(min(heatmap_data$expr), 
  			p <- (ggplot(heatmap_data, 
 					aes(x=sample, y=y_center, fill=expr, height=height))
 				+geom_tile(col="black", show.legend=show_legend)
-				+scale_fill_gradient2(limits=limits,oob=squish,low=min_color, high=max_color, mid=mid_color)
+				+scale_fill_gradient2(limits=limits,oob=squish,low=min_color, high=max_color, mid=mid_color, midpoint=midpoint)
 				+scale_x_discrete(
              		expand = c(0, 0), 
               		position="bottom")
@@ -234,7 +234,7 @@ heatmap_clust <- function(data, dendro="none", limits=c(min(heatmap_data$expr), 
     		p <- (ggplot(heatmap_data, 
 					aes(x=x_center, y=gene, fill=expr, width=width))
 				+geom_tile(col="black", show.legend=show_legend)
-				+scale_fill_gradient2(limits=limits,oob=squish,low=min_color, high=max_color, mid=mid_color)
+				+scale_fill_gradient2(limits=limits,oob=squish,low=min_color, high=max_color, mid=mid_color, midpoint=midpoint)
 				+scale_x_continuous(
 					breaks = sample_pos_table$x_center, 
                     labels = sample_pos_table$sample,

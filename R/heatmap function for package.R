@@ -1,10 +1,3 @@
-library(ggplot2)
-library(ggdendro)
-library(cowplot)
-library(ggsci)
-library(dplyr)
-library(scales)
-
 heatmap_clust <- function(data, dendro="none", limits=c(min(heatmap_data$expr), max(heatmap_data$expr)), dendro_thick=0.25, dendro_prop_x=0.2, dendro_prop_y=0.2,x_axis_text_angle=45, x_axis_font_size=6,  y_axis_font_size=5, colorbar_height=10, title=NULL, title_size=16, min_color="blue2", max_color="red2", mid_color="white", midpoint=0, x_y_ratio=1, show_legend=TRUE, dist_method="euclidean", hclust_method="complete") {
 	x_y_ratio <- ifelse(x_y_ratio=="square_tile", dim(data)[1]/dim(data)[2], x_y_ratio)
 	if (dendro=="none"){
@@ -68,11 +61,14 @@ heatmap_clust <- function(data, dendro="none", limits=c(min(heatmap_data$expr), 
 
 		gene_axis_limits <- with(
     		gene_pos_table, 
-    		c(min(y_center - 0.5 * height), max(y_center + 0.5 * height))) + 0.1 * c(-1, 1) # extra spacing: 0.1
+    		c(min(y_center - 0.5 * height), max(y_center + 0.5 * height)))
     
 		sample_axis_limits <- with(
     		sample_pos_table, 
     		c(min(x_center - 0.5 * width), max(x_center + 0.5 * width)))
+    		
+    	expand_y <- (max(segment_data_x$x)*0.05)*(0.2/dendro_prop_x)
+    	expand_x <- (max(segment_data_y$x)*0.05)*(0.2/dendro_prop_y)
     		
  		p <- (ggplot(heatmap_data, 
 				aes(x=x_center, y=y_center, fill=expr, height=height, width=width))
@@ -87,7 +83,7 @@ heatmap_clust <- function(data, dendro="none", limits=c(min(heatmap_data$expr), 
              	breaks = gene_pos_table[, "y_center"], 
              	labels = gene_pos_table$gene,
               limits =gene_axis_limits, 
-            	expand = c(0, -0.075), 			
+            	expand = c(0, 0), 			
               position="right") 
         	+labs(x = "", y = "") 
         	+theme_bw()
@@ -108,7 +104,7 @@ heatmap_clust <- function(data, dendro="none", limits=c(min(heatmap_data$expr), 
     			aes(x = x, y = y, xend = xend, yend = yend), 
     			size=dendro_thick, 
     			lineend="square") 
-    			+scale_x_reverse(expand = c(0, 0.1)) 
+    			+scale_x_reverse(expand = c(0, expand_y)) 
     			+scale_y_continuous(
     				breaks = gene_pos_table$y_center, 
               	labels = gene_pos_table$gene, 
@@ -129,7 +125,7 @@ heatmap_clust <- function(data, dendro="none", limits=c(min(heatmap_data$expr), 
                 	limits = sample_axis_limits, 
                 	expand = c(0, 0), position="top")
                 	+labs(x = "", y = "", colour = "", size = "") 
-                	+scale_y_continuous(expand = c(0, 0.1))
+                	+scale_y_continuous(expand = c(0, expand_x))
                 	+theme_void()
                 	+theme(
                 		panel.grid.minor = element_blank(),
@@ -161,8 +157,9 @@ heatmap_clust <- function(data, dendro="none", limits=c(min(heatmap_data$expr), 
 
 			gene_axis_limits <- with(
     			gene_pos_table, 
-    			c(min(y_center - 0.5 * height), max(y_center + 0.5 * height))) + 0.1 * c(-1, 1) # extra spacing: 0.1
-
+    			c(min(y_center - 0.5 * height), max(y_center + 0.5 * height)))
+    			
+    		expand_y <- max(segment_data_x$x)*0.05
     		
  			p <- (ggplot(heatmap_data, 
 					aes(x=sample, y=y_center, fill=expr, height=height))
@@ -175,7 +172,7 @@ heatmap_clust <- function(data, dendro="none", limits=c(min(heatmap_data$expr), 
              		breaks = gene_pos_table[, "y_center"], 
              		labels = gene_pos_table$gene,
               		limits =gene_axis_limits, 
-            		expand = c(0, -0.075), 			
+            		expand = c(0, 0), 			
               		position="right") 
         			+labs(x = "", y = "") 
         			+theme_bw()
@@ -196,7 +193,7 @@ heatmap_clust <- function(data, dendro="none", limits=c(min(heatmap_data$expr), 
     				aes(x = x, y = y, xend = xend, yend = yend), 
     				size=dendro_thick, 
     				lineend="square") 
-    			+scale_x_reverse(expand = c(0, 0.1)) 
+    			+scale_x_reverse(expand = c(0, expand_y)) 
     			+scale_y_continuous(
     				breaks = gene_pos_table$y_center, 
               		labels = gene_pos_table$gene, 
@@ -230,6 +227,10 @@ heatmap_clust <- function(data, dendro="none", limits=c(min(heatmap_data$expr), 
 			sample_axis_limits <- with(
     			sample_pos_table, 
     			c(min(x_center - 0.5 * width), max(x_center + 0.5 * width)))
+    		
+
+	    	expand_x <- max(segment_data_y$x)*0.05
+    		
     	
     		p <- (ggplot(heatmap_data, 
 					aes(x=x_center, y=gene, fill=expr, width=width))
@@ -268,7 +269,7 @@ heatmap_clust <- function(data, dendro="none", limits=c(min(heatmap_data$expr), 
                 	limits = sample_axis_limits, 
                 	expand = c(0, 0), position="top")
                 	+labs(x = "", y = "", colour = "", size = "") 
-                	+scale_y_continuous(expand = c(0, 0.1))
+                	+scale_y_continuous(expand = c(0, expand_x))
                 	+theme_void()
                 	+theme(
                 		panel.grid.minor = element_blank(),

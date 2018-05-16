@@ -1,4 +1,4 @@
-heatmap_GSEA <- function(data, dendro="none", limits=c(min(heatmap_data$expr), max(heatmap_data$expr)), dendro_thick=0.25, dendro_prop_x=0.2, dendro_prop_y=0.2,x_axis_text_angle=45, x_axis_font_size=6,  y_axis_font_size=5, colorbar_height=10, title=NULL, title_size=16, x_y_ratio=1, show_legend=TRUE, dist_method="euclidean", hclust_method="complete") {
+heatmap_GSEA <- function(data, dendro="none", limits=c(min(heatmap_data$expr), max(heatmap_data$expr)), dendro_thick=0.25, dendro_prop_x=0.2, dendro_prop_y=0.2,x_axis_text_angle=45, x_axis_font_size=6,  y_axis_font_size=5, colorbar_height=10, title=NULL, title_size=16, x_y_ratio="square_tile", show_legend=TRUE, dist_method="euclidean", hclust_method="complete") {
 	x_y_ratio <- ifelse(x_y_ratio=="square_tile", dim(data)[1]/dim(data)[2], x_y_ratio)
 	if (dendro=="none"){
 		data$gene <- rownames(data)

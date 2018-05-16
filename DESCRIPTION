@@ -9,7 +9,7 @@ Depends: R (>= 3.4.4),
 	cowplot,
 	ggsci,
 	dplyr,
-	scales
+	scales,
 	msigdbr
 Imports: reshape2
 License: What license is it under?
